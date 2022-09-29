@@ -2,7 +2,7 @@ namespace LfuCache_Test1;
 
 public class LfuCache
 {
-    private int _minFrequency = int.MaxValue; 
+    private int _minFrequency = 0; 
     private readonly int _length;
     private readonly Dictionary<int, LinkedList<CacheItem>> _frequencyList = new();
     private readonly Dictionary<string, LinkedListNode<CacheItem>> _cache = new();
@@ -50,16 +50,13 @@ public class LfuCache
         if(!_frequencyList.ContainsKey(1))
             _frequencyList.Add(1, new LinkedList<CacheItem>());
 
-        _frequencyList[1].AddLast(node);
+        _frequencyList[1].AddFirst(node);
         _minFrequency = 1;
     }
 
     private void UpdateFrequency(string key)
     {
         var node = _cache[key];
-
-        if (_minFrequency == node.Value.Frequency)
-            _minFrequency++;
         
         _frequencyList[node.Value.Frequency].Remove(node);
         
@@ -68,5 +65,8 @@ public class LfuCache
         
         _frequencyList[node.Value.Frequency+1].AddFirst(node);
         node.Value.Frequency++;
+
+        if (_frequencyList[_minFrequency].Count == 0)
+            _minFrequency++;
     }
 }
