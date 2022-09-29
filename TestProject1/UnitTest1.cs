@@ -55,5 +55,22 @@ public class Tests
         result.Should().Be("4");
         result = lfuCache.Get("3");
         result.Should().Be("3");
+        result = lfuCache.Get("2");
+        result.Should().Be("2");
+        result = lfuCache.Get("1");
+        result.Should().Be(null);
+        
+        lfuCache.Put("5", "5");
+        
+        result = lfuCache.Get("1");
+        result.Should().Be(null);
+        result = lfuCache.Get("2");
+        result.Should().Be("2");
+        result = lfuCache.Get("3");
+        result.Should().Be("3");
+        result = lfuCache.Get("4");
+        result.Should().Be(null);
+        result = lfuCache.Get("5");
+        result.Should().Be("5");
     }
 }
